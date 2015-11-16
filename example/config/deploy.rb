@@ -1,6 +1,6 @@
 lock "3.4.0" # valid only for current version of Capistrano
 
-set :application, "babel-plugin-css-in-js-demo"
+set :application, "babel-plugin-css-in-js"
 set :log_level, :debug
 set :keep_releases, 3
 

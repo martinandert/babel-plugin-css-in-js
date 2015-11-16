@@ -10,7 +10,7 @@ $(LIB_JS): lib/%.js: src/%.js
 	BABEL_ENV=build $(BIN)/babel $< --out-file $@
 
 fast: node_modules/
-	@BABEL_ENV=build $(BIN)/babel src/ --out-dir lib/
+	BABEL_ENV=build $(BIN)/babel src/ --out-dir lib/
 
 watch: node_modules/
 	BABEL_ENV=build $(BIN)/babel src/ --out-dir lib/ --watch

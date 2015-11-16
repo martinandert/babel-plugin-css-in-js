@@ -13,12 +13,12 @@ import buildCSS from './buildCSS';
 const KEY = '__cssinjs';
 
 const DEFAULT_OPTIONS = {
-  vendorPrefixes: true,
+  vendorPrefixes: false,
   minify: false,
   compressClassNames: false,
   mediaMap: {},
   context: null,
-  cacheDir: 'tmp/cache/babel-plugin-css-in-js/',
+  cacheDir: 'tmp/cache/',
   bundleFile: 'bundle.css'
 };
 
@@ -42,6 +42,11 @@ function visitor(context) {
       },
 
       exit(_, state) {
+        /* istanbul ignore if  */
+        if (state.file.metadata.css) {
+          return;
+        }
+
         const css = buildCSS(state.opts.stylesheets, state.opts);
 
         context[KEY][state.opts.filename] = state.file.metadata.css = css;
@@ -64,21 +69,17 @@ function visitor(context) {
     },
 
     CallExpression(path, state) {
-      const node = path.node;
-
-      if (!t.isIdentifier(node.callee, { name: 'cssInJS' })) {
+      if (!t.isIdentifier(path.node.callee, { name: 'cssInJS' })) {
         return;
       }
 
-      const parent = path.parentPath.node;
-
       assert(
-        t.isVariableDeclarator(parent),
+        t.isVariableDeclarator(path.parentPath.node),
         'return value of cssInJS(...) must be assigned to a variable'
       );
 
-      const sheetId   = parent.id.name;
-      const expr      = node.arguments[0];
+      const sheetId = path.parentPath.node.id.name;
+      const expr    = path.node.arguments[0];
 
       assert(expr, 'cssInJS(...) call is missing an argument');
 
@@ -89,16 +90,14 @@ function visitor(context) {
 
       const gcnOptions = extend({}, state.opts, { prefixes: [state.opts.filename, sheetId] });
 
-      let properties = [];
-
-      Object.keys(sheet).forEach((styleId) => {
-        const className = generateClassName(styleId, gcnOptions);
-        const key       = t.identifier(styleId);
-        const value     = t.stringLiteral(className);
-        const property  = t.objectProperty(key, value);
-
-        properties.push(property);
-      });
+      const properties = Object.keys(sheet).reduce((memo, styleId) => {
+        return memo.concat(
+          t.objectProperty(
+            t.identifier(styleId),
+            t.stringLiteral(generateClassName(styleId, gcnOptions))
+          )
+        );
+      }, []);
 
       path.replaceWith(t.objectExpression(properties));
     }

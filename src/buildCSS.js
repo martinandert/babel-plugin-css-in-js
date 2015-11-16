@@ -1,7 +1,7 @@
 import postcss from 'postcss';
-import extend from 'object-assign';
 import autoprefixer from 'autoprefixer';
 import CleanCSS from 'clean-css';
+import extend from 'object-assign';
 import foreach from 'foreach';
 import transformSpecificationIntoCSS from './transformSpecificationIntoCSS';
 

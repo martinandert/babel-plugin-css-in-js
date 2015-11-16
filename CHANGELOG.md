@@ -9,6 +9,6 @@ Tags:
 - [Internal]
 - [Polish]
 
-## 0.0.1 (November 8, 2015)
+## 0.1.0 (November 16, 2015)
 
 First public release.

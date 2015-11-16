@@ -2,4 +2,6 @@
 /node_modules
 /public/bundle.css
 /public/bundle.js
+/quick/bundle.css
+/quick/tmp
 /tmp

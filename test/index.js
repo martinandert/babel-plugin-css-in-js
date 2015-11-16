@@ -2,7 +2,6 @@ import assert from 'assert';
 import os from 'os';
 import { transform } from 'babel-core';
 import plugin from '../src/';
-
 import { clearCache } from '../src/compressClassName';
 
 describe('babel-plugin-css-in-js', () => {

@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-css-in-js",
   "version": "0.0.0",
-  "description": "A Babel plugin that extracts and bundles stylesheets from JavaScript files.",
+  "description": "A plugin for Babel v6 which transforms inline styles defined in JavaScript modules into class names so they become available to, e.g. the `className` prop of React elements. While transforming, the plugin processes all JavaScript style definitions found and bundles them up into a CSS file, ready to be requested from your web server.",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -40,11 +40,11 @@
     "babel-core": "^6.1.21",
     "babel-eslint": "^4.1.4",
     "babel-istanbul": "^0.5.8",
+    "babel-plugin-add-module-exports": "^0.1.1",
     "babel-preset-es2015": "^6.1.18",
     "babel-register": "^6.1.18",
     "babylon": "^6.1.21",
     "eslint": "^1.9.0",
-    "istanbul": "^0.4.0",
     "mocha": "^2.3.3"
   }
 }

@@ -1,9 +1,6 @@
 # babel-plugin-css-in-js Example Project
 
-TODO: introduction
-
-
-See the Makefile for details.
+This example utilizes babel-plugin-css-in-js to process and bundle CSS defined in JS. See `Makefile` and `.babelrc` for details.
 
 To run it in development environment, execute
 

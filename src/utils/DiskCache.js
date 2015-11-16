@@ -28,7 +28,7 @@ function store(data, filePath) {
 
 export default class DiskCache {
   constructor(name, options) {
-    this.filePath = path.resolve(path.join(options.cacheDir, name + '.json'));
+    this.filePath = path.resolve(path.join(options.cacheDir, 'babel-plugin-css-in-js', name + '.json'));
 
     this.fetch.bind(this);
     this.clear.bind(this);
