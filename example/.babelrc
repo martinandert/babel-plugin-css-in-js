@@ -1,0 +1,33 @@
+{
+  "presets": [
+    "es2015",
+    "react"
+  ],
+  "plugins": [
+    "transform-node-env-inline"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        ["css-in-js", {
+          "mediaMap": {
+            "phone": "media only screen and (max-width: 640px)"
+          },
+          "bundleFile": "public/bundle.css"
+        }]
+      ]
+    },
+    "production": {
+      "plugins": [
+        ["css-in-js", {
+          "minify": true,
+          "compressClassNames": true,
+          "mediaMap": {
+            "phone": "media only screen and (max-width: 640px)"
+          },
+          "bundleFile": "public/bundle.css"
+        }]
+      ]
+    }
+  }
+}

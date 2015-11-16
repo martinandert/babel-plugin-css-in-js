@@ -1,0 +1,27 @@
+* {
+  box-sizing: border-box;
+}
+
+h1 {
+  background-color: #666;
+  color: white;
+  margin: 0;
+  padding: 10px;
+  font-size: 20px;
+  line-height: 1;
+  text-align: center;
+}
+
+h2, h3, h4, h5, h6 {
+  margin-top: 45px;
+  margin-bottom: 15px;
+}
+
+div, p, ul, ol, li, table {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+div:last-child, p:last-child, ul:last-child, ol:last-child, li:last-child, table:last-child {
+  margin-bottom: 0;
+}

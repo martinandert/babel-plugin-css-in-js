@@ -1,0 +1,12 @@
+/.babelrc
+/.eslintrc
+/.gitignore
+/.npmignore
+/.travis.yml
+/coverage
+/example
+/src
+/tmp
+/test
+/CHANGELOG.md
+/Makefile
