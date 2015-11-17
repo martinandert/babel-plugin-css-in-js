@@ -7,7 +7,7 @@ class MediaQueries extends React.Component {
       <div>
         <h2>Media Queries</h2>
 
-        <p>Resize your browser window (or change your phone's orientation) to see how media queries take effect.</p>
+        <p>Resize your browser window (or change your phone´s orientation) to see how media queries take effect.</p>
 
         <p className={cx(styles.hidden, styles.small)}>
           This paragraph is only visible if your screen is <strong>at most 320 logical pixels</strong> wide.

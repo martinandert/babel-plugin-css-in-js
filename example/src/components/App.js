@@ -10,7 +10,7 @@ class App extends React.Component {
     return (
       <div className={styles.root}>
         <p>This is a small demonstration of what <a href={repoUrl}>babel-plugin-css-in-js</a> is capable of.</p>
-        <p>Use your browser's "Inspect Element" tool to see inline styles turned into class names.</p>
+        <p>Use your browser´s "Inspect Element" tool to see inline styles turned into class names.</p>
         <p>You can find the code for all components <a href={codeUrl}>here</a>.</p>
 
         <MediaQueries />
