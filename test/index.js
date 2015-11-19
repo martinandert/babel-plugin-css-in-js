@@ -72,7 +72,8 @@ describe('babel-plugin-css-in-js', () => {
     const css = testTransformed({
       from: 'var styles = cssInJS({ foo: { marginTop: -10, content: "foo" } });',
       to:   'var styles = { foo: "unknown-styles-foo" };',
-      options: { babel: { filename: undefined } } });
+      options: { babel: { filename: undefined } }
+    });
 
     assert(css.indexOf('.unknown-styles-foo') > -1);
   });
