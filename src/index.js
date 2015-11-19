@@ -35,21 +35,20 @@ function visitor(context) {
 
   return {
     Program: {
-      enter(_, state) {
-        const filename = path.relative(process.cwd(), state.file.opts.filename);
+      enter() {
+        const filename  = path.relative(process.cwd(), this.file.opts.filename);
+        const options   = extend({}, DEFAULT_OPTIONS, this.opts, { filename });
 
-        state.opts = extend({}, DEFAULT_OPTIONS, state.opts, { filename, stylesheets: {} });
+        this.cssInJS = { filename, options, stylesheets: {} };
       },
 
-      exit(_, state) {
-        /* istanbul ignore if  */
-        if (state.file.metadata.css) {
-          return;
-        }
+      exit() {
+        /* istanbul ignore if */
+        if (this.done) return;
 
-        const css = buildCSS(state.opts.stylesheets, state.opts);
+        const css = buildCSS(this.cssInJS.stylesheets, this.cssInJS.options);
 
-        context[KEY][state.opts.filename] = state.file.metadata.css = css;
+        context[KEY][this.cssInJS.filename] = this.file.metadata.css = css;
 
         let bundleCSS = '';
 
@@ -59,16 +58,18 @@ function visitor(context) {
           }
         });
 
-        if (bundleCSS.length && state.opts.bundleFile) {
-          const bundleFile = path.join(process.cwd(), state.opts.bundleFile);
+        if (bundleCSS.length && this.cssInJS.options.bundleFile) {
+          const bundleFile = path.join(process.cwd(), this.cssInJS.options.bundleFile);
 
           mkdirp.sync(path.dirname(bundleFile));
           fs.writeFileSync(bundleFile, bundleCSS, { encoding: 'utf8' });
         }
+
+        this.done = true;
       }
     },
 
-    CallExpression(path, state) {
+    CallExpression(path) {
       if (!t.isIdentifier(path.node.callee, { name: 'cssInJS' })) {
         return;
       }
@@ -83,12 +84,12 @@ function visitor(context) {
 
       assert(expr, 'cssInJS(...) call is missing an argument');
 
-      const obj   = transformObjectExpressionIntoStyleSheetObject(expr, state.opts.context);
+      const obj   = transformObjectExpressionIntoStyleSheetObject(expr, this.cssInJS.options.context);
       const sheet = transformStyleSheetObjectIntoSpecification(obj);
 
-      state.opts.stylesheets[sheetId] = sheet;
+      this.cssInJS.stylesheets[sheetId] = sheet;
 
-      const gcnOptions = extend({}, state.opts, { prefixes: [state.opts.filename, sheetId] });
+      const gcnOptions = extend({}, this.cssInJS.options, { prefixes: [this.cssInJS.filename, sheetId] });
 
       const properties = Object.keys(sheet).reduce((memo, styleId) => {
         return memo.concat(
