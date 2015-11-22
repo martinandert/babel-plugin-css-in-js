@@ -37,7 +37,7 @@ function visitor(context) {
     Program: {
       enter() {
         const filename  = path.relative(process.cwd(), this.file.opts.filename);
-        const options   = extend({}, DEFAULT_OPTIONS, this.opts, { filename });
+        const options   = buildOptions(this.opts, filename);
 
         this.cssInJS = { filename, options, stylesheets: {} };
       },
@@ -103,4 +103,22 @@ function visitor(context) {
       path.replaceWith(t.objectExpression(properties));
     }
   };
+}
+
+let contextFileCache = {};
+
+function buildOptions(options, filename) {
+  options = extend({}, DEFAULT_OPTIONS, options, { filename });
+
+  if (typeof options.context === 'string') {
+    const file = path.resolve(options.context);
+
+    if (typeof contextFileCache[file] === 'undefined') {
+      contextFileCache[file] = require(file);
+    }
+
+    options.context = contextFileCache[file];
+  }
+
+  return options;
 }

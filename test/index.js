@@ -205,15 +205,37 @@ describe('babel-plugin-css-in-js', () => {
     });
   });
 
-  describe('with context option provided', () => {
-    it('respects context when generating css', () => {
-      const css = testTransformed({
-        from: 'var styles = cssInJS({ foo: { margin: forty.two + "pt" } });',
-        to:   'var styles = { foo: "test-styles-foo" };',
-        options: { context: { forty: { two: 42 } } }
-      });
+  describe('with context option', () => {
+    describe('being a plain object', () => {
+      const context = {
+        forty: {
+          two: 42
+        }
+      };
 
-      testStyleRule(css, 'test-styles-foo', 'margin: 42pt');
+      it('respects context when generating css', () => {
+        const css = testTransformed({
+          from: 'var styles = cssInJS({ foo: { margin: forty.two + "pt" } });',
+          to:   'var styles = { foo: "test-styles-foo" };',
+          options: { context }
+        });
+
+        testStyleRule(css, 'test-styles-foo', 'margin: 42pt');
+      });
+    });
+
+    describe('being a file path', () => {
+      const context = "test/fixtures/context";
+
+      it('uses the modules default export as value', () => {
+        const css = testTransformed({
+          from: 'var styles = cssInJS({ foo: { margin: forty.two + "pt" } });',
+          to:   'var styles = { foo: "test-styles-foo" };',
+          options: { context }
+        });
+
+        testStyleRule(css, 'test-styles-foo', 'margin: 42pt');
+      });
     });
   });
 });
