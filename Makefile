@@ -9,7 +9,7 @@ $(LIB_JS): lib/%.js: src/%.js
 	@mkdir -p $(dir $@)
 	BABEL_ENV=build $(BIN)/babel $< --out-file $@
 
-fast: node_modules/
+fast: node_modules/ clean
 	BABEL_ENV=build $(BIN)/babel src/ --out-dir lib/
 
 watch: node_modules/

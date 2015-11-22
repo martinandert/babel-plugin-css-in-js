@@ -22,6 +22,12 @@
   "engines": {
     "node": ">=0.12"
   },
+  "scripts": {
+    "build": "make fast",
+    "test": "make test",
+    "lint": "make lint",
+    "coverage": "make test-cov && open coverage/lcov-report/index.html"
+  },
   "dependencies": {
     "autoprefixer": "^6.1.0",
     "babel-generator": "^6.2.0",
