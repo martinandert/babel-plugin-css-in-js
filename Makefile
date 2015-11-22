@@ -47,7 +47,7 @@ publish:
 	npm publish
 
 define release
-	npm version $(1) -m 'release v%s'
+	npm version $(1) -m 'Release v%s'
 endef
 
 .PHONY: build fast watch lint test test-cov clean distclean release-patch release-minor release-major publish
