@@ -20,7 +20,7 @@ In order for the plugin to work, in your components, surround each inline style 
 ```jsx
 <Button className={styles.button} />
 
-var styles = cssInJs({
+var styles = cssInJS({
   button: {
     padding: 5,
     backgroundColor: "blue"
