@@ -9,6 +9,11 @@ Tags:
 - [Internal]
 - [Polish]
 
+## Unreleased
+
+- **Polish**
+  - Update dependencies
+
 ## 0.3.0 (November 22, 2015)
 
 - **New Feature**
