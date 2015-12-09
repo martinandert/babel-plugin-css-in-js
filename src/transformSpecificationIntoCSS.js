@@ -3,7 +3,7 @@ import buildCSSRule from './buildCSSRule';
 import generateClassName from './generateClassName';
 
 export default function transformSpecificationIntoCSS(spec, options = {}) {
-  let css = [];
+  const css = [];
 
   foreach(spec, (value, key) => {
     processStyle(css, key, value, 0, options);
@@ -24,7 +24,7 @@ function processRules(css, name, rules, level, options) {
   css.push(indent(level) + '.' + generateClassName(name, options) + ' {');
 
   foreach(rules, (value, key) => {
-    css.push(indent(level + 1) + buildCSSRule(key, value, options));
+    css.push(indent(level + 1) + buildCSSRule(key, value));
   });
 
   css.push(indent(level) + '}');
@@ -47,7 +47,7 @@ function processMediaQueries(css, name, mediaQueries, level, options) {
 }
 
 function processMediaQuery(css, name, query, content, level, options) {
-  var mediaQueryCSS = [];
+  const mediaQueryCSS = [];
 
   processRules(mediaQueryCSS, name, content.rules, level + 1, options);
   processSelectors(mediaQueryCSS, name, content.selectors, level + 1, options);

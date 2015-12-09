@@ -1,6 +1,5 @@
 const hasOwnProperty = Object.prototype.hasOwnProperty;
-
-let cache = {};
+const cache = {};
 
 export default class MemoryCache {
   constructor(name) {

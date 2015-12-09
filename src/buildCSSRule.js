@@ -34,7 +34,7 @@ const unitlessNumbers = {
   strokeWidth: true,
 };
 
-export default function buildCSSRule(key, value, options) {
+export default function buildCSSRule(key, value) {
   if (!unitlessNumbers[key] && typeof value === 'number') {
     value = '' + value + 'px';
   } else if (key === 'content' && !isUnquotedContentValue.test(value)) {

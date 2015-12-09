@@ -9,7 +9,7 @@ export default function buildCSS(stylesheets, options) {
   let css = '';
 
   foreach(stylesheets, (stylesheet, name) => {
-    let cssOptions = extend({}, options);
+    const cssOptions = extend({}, options);
     cssOptions.prefixes = [options.filename, name];
 
     css += transformSpecificationIntoCSS(stylesheet, cssOptions);

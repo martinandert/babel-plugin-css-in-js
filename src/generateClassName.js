@@ -4,7 +4,7 @@ import splitSelector from './utils/splitSelector';
 const invalidChars = /[^_a-z0-9-]/ig;
 
 export default function generateClassName(id, options) {
-  var result = '';
+  let result = '';
 
   if (options.prefix) {
     result += options.prefix.replace(invalidChars, '_') + '-';

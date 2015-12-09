@@ -1,14 +1,14 @@
-import DiskCache    from './utils/DiskCache';
-import MemoryCache  from './utils/MemoryCache';
+import DiskCache from './utils/DiskCache';
+import MemoryCache from './utils/MemoryCache';
 
 const cacheName = 'classnames';
 
 function getCache(options) {
   if (options.cacheDir) {
     return new DiskCache(cacheName, options);
-  } else {
-    return new MemoryCache(cacheName);
   }
+
+  return new MemoryCache(cacheName);
 }
 
 export function clearCache(options) {
@@ -16,9 +16,9 @@ export function clearCache(options) {
 }
 
 export default function compressClassName(className, options) {
-  let cache = getCache(options);
+  const cache = getCache(options);
 
-  return cache.fetch(className, function(keys) {
+  return cache.fetch(className, (keys) => {
     return '_' + keys.length.toString(36).split('').reverse().join('');
   });
 }

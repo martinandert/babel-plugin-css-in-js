@@ -1,9 +1,9 @@
 import assert from 'assert';
-import path from 'path';
-import fs from 'fs';
-import mkdirp from 'mkdirp';
 import extend from 'object-assign';
 import foreach from 'foreach';
+import { writeFileSync } from 'fs';
+import { relative, join, dirname, resolve } from 'path';
+import { sync as mkDirPSync } from 'mkdirp';
 
 import transformObjectExpressionIntoStyleSheetObject from './transformObjectExpressionIntoStyleSheetObject';
 import transformStyleSheetObjectIntoSpecification from './transformStyleSheetObjectIntoSpecification';
@@ -20,14 +20,14 @@ const DEFAULT_OPTIONS = {
   mediaMap: {},
   context: null,
   cacheDir: 'tmp/cache/',
-  bundleFile: 'bundle.css'
+  bundleFile: 'bundle.css',
 };
 
 export default function plugin(context) {
   context[KEY] = {};
 
   return {
-    visitor: visitor(context)
+    visitor: visitor(context),
   };
 }
 
@@ -37,8 +37,8 @@ function visitor(context) {
   return {
     Program: {
       enter() {
-        const filename  = path.relative(process.cwd(), this.file.opts.filename);
-        const options   = buildOptions(this.opts, filename);
+        const filename = relative(process.cwd(), this.file.opts.filename);
+        const options = buildOptions(this.opts, filename);
 
         this.cssInJS = { filename, options, stylesheets: {} };
       },
@@ -53,21 +53,21 @@ function visitor(context) {
 
         let bundleCSS = '';
 
-        foreach(context[KEY], (css, filename) => {
-          if (css.length) {
-            bundleCSS += css;
+        foreach(context[KEY], (fileCSS) => {
+          if (fileCSS.length) {
+            bundleCSS += fileCSS;
           }
         });
 
         if (bundleCSS.length && this.cssInJS.options.bundleFile) {
-          const bundleFile = path.join(process.cwd(), this.cssInJS.options.bundleFile);
+          const bundleFile = join(process.cwd(), this.cssInJS.options.bundleFile);
 
-          mkdirp.sync(path.dirname(bundleFile));
-          fs.writeFileSync(bundleFile, bundleCSS, { encoding: 'utf8' });
+          mkDirPSync(dirname(bundleFile));
+          writeFileSync(bundleFile, bundleCSS, { encoding: 'utf8' });
         }
 
         this.done = true;
-      }
+      },
     },
 
     CallExpression(path) {
@@ -81,11 +81,11 @@ function visitor(context) {
       );
 
       const sheetId = path.parentPath.node.id.name;
-      const expr    = path.node.arguments[0];
+      const expr = path.node.arguments[0];
 
       assert(expr, 'cssInJS(...) call is missing an argument');
 
-      const obj   = transformObjectExpressionIntoStyleSheetObject(expr, this.cssInJS.options.context);
+      const obj = transformObjectExpressionIntoStyleSheetObject(expr, this.cssInJS.options.context);
       const sheet = transformStyleSheetObjectIntoSpecification(obj);
 
       this.cssInJS.stylesheets[sheetId] = sheet;
@@ -102,17 +102,17 @@ function visitor(context) {
       }, []);
 
       path.replaceWith(t.objectExpression(properties));
-    }
+    },
   };
 }
 
-let contextFileCache = {};
+const contextFileCache = {};
 
 function buildOptions(options, filename) {
   options = extend({}, DEFAULT_OPTIONS, options, { filename });
 
   if (typeof options.context === 'string') {
-    const file = path.resolve(options.context);
+    const file = resolve(options.context);
 
     if (typeof contextFileCache[file] === 'undefined') {
       contextFileCache[file] = require(file);

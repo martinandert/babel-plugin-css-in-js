@@ -9,6 +9,11 @@ Tags:
 - [Internal]
 - [Polish]
 
+## Unreleased
+
+- **Internal**
+  - Use airbnb's linting rules as a basis
+
 ## v1.1.0 (December 9, 2015)
 
 - **New Feature**

@@ -1,12 +1,14 @@
 {
   "parser": "babel-eslint",
-  "rules": {
-    "strict": [2, "never"],
-    "quotes": [2, "single", "avoid-escape"],
-    "no-multi-spaces": 0,
-    "no-use-before-define": [2, "nofunc"]
-  },
+  "extends": "airbnb/base",
   "env": {
     "node": true
+  },
+  "globals": {
+    "__DEV__": false
+  },
+  "rules": {
+    "no-use-before-define": [2, "nofunc"],
+    "no-param-reassign": 0
   }
 }

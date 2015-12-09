@@ -11,11 +11,11 @@ export default function transformObjectExpressionIntoStyleSheetObject(expr, cont
 
   context = vm.createContext(extend({}, context));
 
-  context.evaluate = function(node) {
+  context.evaluate = function evaluate(node) {
     return vm.runInContext(generate(node).code, this);
   };
 
-  let result = {};
+  const result = {};
 
   expr.properties.forEach((property) => {
     processTopLevelProperty(property.key, property.value, result, context);
