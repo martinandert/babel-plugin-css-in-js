@@ -13,6 +13,7 @@ import buildCSS from './buildCSS';
 const KEY = '__cssinjs';
 
 const DEFAULT_OPTIONS = {
+  identifier: 'cssInJS',
   vendorPrefixes: false,
   minify: false,
   compressClassNames: false,
@@ -70,7 +71,7 @@ function visitor(context) {
     },
 
     CallExpression(path) {
-      if (!t.isIdentifier(path.node.callee, { name: 'cssInJS' })) {
+      if (!t.isIdentifier(path.node.callee, { name: this.cssInJS.options.identifier })) {
         return;
       }
 

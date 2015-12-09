@@ -238,4 +238,16 @@ describe('babel-plugin-css-in-js', () => {
       });
     });
   });
+
+  describe('with identifier option provided', () => {
+    it('uses that identifier to detect stylesheets to transform', () => {
+      const css = testTransformed({
+        from: 'var styles = __OMG__({ foo: { margin: 0 } });',
+        to:   'var styles = { foo: "test-styles-foo" };',
+        options: { identifier: '__OMG__' }
+      });
+
+      testStyleRule(css, 'test-styles-foo', 'margin: 0');
+    });
+  });
 });
