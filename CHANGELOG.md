@@ -9,7 +9,7 @@ Tags:
 - [Internal]
 - [Polish]
 
-## Unreleased
+## v1.1.0 (December 9, 2015)
 
 - **New Feature**
   - Add option to change the identifier used to detect transformable inline styles
