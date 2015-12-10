@@ -12,6 +12,7 @@ Tags:
 ## Unreleased
 
 - **Internal**
+  - Add a .codeclimate.yml file
   - Use airbnb's linting rules as a basis
 
 ## v1.1.0 (December 9, 2015)
