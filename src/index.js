@@ -24,7 +24,10 @@ const DEFAULT_OPTIONS = {
 };
 
 export default function plugin(context) {
-  context[KEY] = {};
+  context[KEY] = {
+    cache: {},
+    visiting: {},
+  };
 
   return {
     visitor: visitor(context),
@@ -41,32 +44,34 @@ function visitor(context) {
         const options = buildOptions(this.opts, filename);
 
         this.cssInJS = { filename, options, stylesheets: {} };
+        context[KEY].visiting[filename] = true;
       },
 
       exit() {
+        const filename = this.cssInJS.filename;
         /* istanbul ignore if */
-        if (this.done) return;
+        if (!context[KEY].visiting[filename]) return;
 
         const css = buildCSS(this.cssInJS.stylesheets, this.cssInJS.options);
 
-        context[KEY][this.cssInJS.filename] = this.file.metadata.css = css;
-
-        let bundleCSS = '';
-
-        foreach(context[KEY], (fileCSS) => {
-          if (fileCSS.length) {
-            bundleCSS += fileCSS;
-          }
-        });
-
-        if (bundleCSS.length && this.cssInJS.options.bundleFile) {
-          const bundleFile = join(process.cwd(), this.cssInJS.options.bundleFile);
-
-          mkDirPSync(dirname(bundleFile));
-          writeFileSync(bundleFile, bundleCSS, { encoding: 'utf8' });
+        this.file.metadata.css = css;
+        if (css && css.length && css.length > 0) {
+          context[KEY].cache[this.cssInJS.filename] = css;
+        } else {
+          delete context[KEY].cache[this.cssInJS.filename];
         }
 
-        this.done = true;
+        if (Object.keys(context[KEY].cache).length > 0 && this.cssInJS.options.bundleFile) {
+          const bundleFile = join(process.cwd(), this.cssInJS.options.bundleFile);
+          mkDirPSync(dirname(bundleFile));
+          const output = [];
+          foreach(context[KEY].cache, (fileCSS) => {
+            output.push(fileCSS);
+          });
+          writeFileSync(bundleFile, output.join(''), { encoding: 'utf8' });
+        }
+
+        context[KEY].visiting[filename] = false;
       },
     },
 
