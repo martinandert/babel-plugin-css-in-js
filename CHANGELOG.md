@@ -9,7 +9,7 @@ Tags:
 - [Internal]
 - [Polish]
 
-## Unreleased
+## v1.2.0 (February 20, 2016)
 
 - **New Feature**
   - Allow spaces in top-level style names
