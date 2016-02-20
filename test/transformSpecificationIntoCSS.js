@@ -52,6 +52,23 @@ describe('transformSpecificationIntoCSS', () => {
             }
           }
         }
+      },
+      'foo p': {
+        rules: {
+          margin: 0
+        },
+        selectors: {
+          ':nth-child(2)': {
+            rules: {
+              backgroundColor: 'green'
+            }
+          },
+          ':nth-of-type(3)': {
+            rules: {
+              backgroundColor: 'red'
+            }
+          }
+        }
       }
     }, css`
       .foo:hover {
@@ -60,6 +77,15 @@ describe('transformSpecificationIntoCSS', () => {
       }
       .foo:first-child {
         margin-top: 0px;
+      }
+      .foo p {
+        margin: 0px;
+      }
+      .foo p:nth-child(2) {
+        background-color: green;
+      }
+      .foo p:nth-of-type(3) {
+        background-color: red;
       }
     `);
   });

@@ -689,6 +689,38 @@ describe('transformStyleSheetObjectIntoSpecification', () => {
         }
       }
     });
+
+    testValidInput({
+      foo: {
+        color: 'red',
+        padding: 10
+      },
+      'foo p': {
+        ':nth-child(1)': {
+          backgroundColor: 'green'
+        }
+      }
+    }, {
+      foo: {
+        rules: {
+          color: 'red',
+          padding: 10
+        },
+        selectors: {},
+        mediaQueries: {},
+      },
+      'foo p': {
+        mediaQueries: {},
+        rules: {},
+        selectors: {
+          ':nth-child(1)': {
+            rules: {
+              backgroundColor: 'green'
+            }
+          }
+        }
+      }
+    });
   });
 
   it('throws on invalid input', () => {
@@ -724,7 +756,5 @@ describe('transformStyleSheetObjectIntoSpecification', () => {
 
     testInvalidInput({ ':hover': {} },                /stand-alone selectors are not allowed at the top-level/);
     testInvalidInput({ '@media1': { ':hover': {} } }, /stand-alone selectors are not allowed in top-level media queries/);
-
-    testInvalidInput({ 'foo bar': {} },     /style name is invalid/);
   });
 });

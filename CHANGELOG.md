@@ -11,6 +11,8 @@ Tags:
 
 ## Unreleased
 
+- **New Feature**
+  - Allow spaces in top-level style names
 - **Internal**
   - Add a .codeclimate.yml file
   - Use airbnb's linting rules as a basis
