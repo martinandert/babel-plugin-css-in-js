@@ -721,6 +721,22 @@ describe('transformStyleSheetObjectIntoSpecification', () => {
         }
       }
     });
+
+    testValidInput({
+      a: {
+        width: 150,
+        margin: 'auto'
+      }
+    }, {
+      a: {
+        rules: {
+          width: 150,
+          margin: 'auto'
+        },
+        selectors: {},
+        mediaQueries: {},
+      }
+    });
   });
 
   it('throws on invalid input', () => {

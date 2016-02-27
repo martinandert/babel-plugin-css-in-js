@@ -9,6 +9,11 @@ Tags:
 - [Internal]
 - [Polish]
 
+## Unreleased
+
+- **Bug Fix**
+  - Allow single letter class names
+
 ## v1.2.0 (February 20, 2016)
 
 - **New Feature**
