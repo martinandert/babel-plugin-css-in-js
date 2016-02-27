@@ -9,6 +9,11 @@ Tags:
 - [Internal]
 - [Polish]
 
+## v1.2.2 (February 27, 2016)
+
+- **Bug Fix**
+  - Fix second pass clearing the originally generated CSS
+
 ## v1.2.1 (February 27, 2016)
 
 - **Bug Fix**
