@@ -44,30 +44,36 @@ function visitor(context) {
         const options = buildOptions(this.opts, filename);
 
         this.cssInJS = { filename, options, stylesheets: {} };
+
         context[KEY].visiting[filename] = true;
       },
 
       exit() {
         const filename = this.cssInJS.filename;
+
         /* istanbul ignore if */
         if (!context[KEY].visiting[filename]) return;
 
         const css = buildCSS(this.cssInJS.stylesheets, this.cssInJS.options);
 
         this.file.metadata.css = css;
-        if (css && css.length && css.length > 0) {
+
+        if (css && css.length) {
           context[KEY].cache[this.cssInJS.filename] = css;
         } else {
           delete context[KEY].cache[this.cssInJS.filename];
         }
 
-        if (Object.keys(context[KEY].cache).length > 0 && this.cssInJS.options.bundleFile) {
+        if (this.cssInJS.options.bundleFile && Object.keys(context[KEY].cache).length) {
           const bundleFile = join(process.cwd(), this.cssInJS.options.bundleFile);
-          mkDirPSync(dirname(bundleFile));
           const output = [];
+
+          mkDirPSync(dirname(bundleFile));
+
           foreach(context[KEY].cache, (fileCSS) => {
             output.push(fileCSS);
           });
+
           writeFileSync(bundleFile, output.join(''), { encoding: 'utf8' });
         }
 
