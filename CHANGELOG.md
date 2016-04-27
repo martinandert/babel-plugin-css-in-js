@@ -9,7 +9,7 @@ Tags:
 - [Internal]
 - [Polish]
 
-## Unreleased
+## v1.2.3 (April 27, 2016)
 
 - **Bug Fix**
   - Allow string value to be blank for 'content' rule (#10)
