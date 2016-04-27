@@ -32,6 +32,7 @@ describe('transformObjectExpressionIntoStyleSheetObject', () => {
     testValidInput('{ foo: { bar: baz + " " + bam } }', { foo: { bar: 'BAZ BAM' } }, { baz: 'BAZ', bam: 'BAM' });
     testValidInput('{ foo: { bar: a * (b + c) + "px" } }', { foo: { bar: '14px' } }, { a: 2, b: 3, c: 4 });
     testValidInput('{ foo: { bar: a.b } }', { foo: { bar: 'c' } }, { a: { b: 'c' } });
+    testValidInput('{ foo: { content: " " } }', { foo: { content: " " } });
     testValidInput('{ ["foo"]: {} }', { foo: {} });
     testValidInput('{ undefined: {} }', { undefined: {} });
     testValidInput(`{

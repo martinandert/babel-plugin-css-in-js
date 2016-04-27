@@ -9,6 +9,11 @@ Tags:
 - [Internal]
 - [Polish]
 
+## Unreleased
+
+- **Bug Fix**
+  - Allow string value to be blank for 'content' rule (#10)
+
 ## v1.2.2 (February 27, 2016)
 
 - **Bug Fix**
