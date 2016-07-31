@@ -304,7 +304,7 @@ Example for a given context `{ MyColors: { green: '#00FF00' }, myUrl: 'path/to/i
 
 ## Dynamic Styles using Function Expression
 
-In order to write styles dynamically, you can use Function Expression. FunctionExpression gives more freedom than ObjectExpression. It receives `context` object as first parameter, with this, you can do any programmatic operation, such as the condition statement or the iteration statement even. `es6` syntax is also available. One thing to keep in mind is that the bundle file extraction and transformation are conducted according to the return value of FunctionExpression.
+In order to write style rules dynamically, you can use Function Expression. FunctionExpression gives more freedom than ObjectExpression. It receives `context` object as first parameter, with this, you can do any programmatic operation, such as the condition statement or the iteration statement even. `es6` syntax is also available. One thing to keep in mind is that the bundle file extraction and js file transformation are conducted by style rule be returned from FunctionExpression.
 
 When you want to show different styles based on whether user environment is android or ios in order to support cross platform, when you want to support various themes like dark, light theme. or when you want to see different styles according to production, development environement, you can use as below:
 
@@ -329,20 +329,23 @@ const style = cssInJS( (context)=>{
     },
 
     buttonBox: {
-      backgroundColor: 
+      backgroundColor: theme === 'dark' ? 'black' : 'white';
     }
   };
 });
 ```
 
-```js
-// babel setting example,
-// webpack.config.js file
+`context` in the above code, can be passed from babel loader setting like this:
 
-const env = process.env.NODE_ENV;
-const platform = process.env.PLATFORM;
-const theme = 'dark';   // it can be set dynamically
-const babelPluginCSSInJS = [
+```js
+// webpack.config.js
+
+const env = process.env.NODE_ENV;       // this build env can be set dynamically
+const platform = process.env.PLATFORM;  // this build env can be set dynamically
+const theme = 'dark';                   // this build env can be set dynamically
+
+// to dynamic setting, it is recommended to do set in js file instaed of .babelrc
+const babelPluginCSSInJS = [   
   ["css-in-js", {
     compressClassNames: env === 'production',
     vendorPrefixes: true,
@@ -355,7 +358,10 @@ const babelPluginCSSInJS = [
       __ANDROID__: platform === 'android',  // it can be set dynamically
       __ENV__: env,                         // it can be set dynamically
       theme: theme,                         // it can be set dynamically
-    }
+    },
+
+    // or you can load from other file
+    // context: require('./cssInJSContext.js'),
   }],
 ];
 
@@ -390,10 +396,10 @@ module.exports = {
 }
 ```
 
-Note: You cannot use other module using require, import within FunctionExpression. Also you cannot access any reference outside of FunctionExpression. It should only be a function albe to perform in a completely blocked sandbox environment, reveiving only the context object.
+Note: It should only be a function able to perform in a completely blocked nodejs [VM](https://nodejs.org/api/vm.html) sandbox environment, reveiving only the context object. Therefore you cannot use other module using require, import within FunctionExpression. Also you cannot access any references outside FunctionExpression.
 
-Here are some example, carefully check the `Wrong!` comments:
-```
+Here are another example, carefully review the `Wrong!` comments:
+```js
 const buttonNum = 3;
 
 const style = cssInJS( (context)=>{ // ------ start of the FunctionExpression scope
@@ -436,13 +442,13 @@ const style = cssInJS( (context)=>{ // ------ start of the FunctionExpression sc
 
       width: max( aWidth, bWidth ),    // OK. 'max' is inside FunctionExpression scope
       height: min( aHeight, bHeight ), // OK. 'min' is inside FunctionExpression scope
-      // As long as reference is inside FunctionExpression scope, you can do anything you want
+      // As long as reference is inside FunctionExpression scope, you can use any references you want
     },
   };
 });   // ------------------------------------ end of the FunctionExpression scope!
 ```
 
-In the above `Wrong!` case you will encounter `When use the FunctionExpression for cssInJS, all references must be in the function scope` error.
+In the above `Wrong!` case, you will encounter `When use the FunctionExpression for cssInJS, all references must be in the function scope` error.
 
 
 
