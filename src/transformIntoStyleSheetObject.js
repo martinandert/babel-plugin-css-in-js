@@ -37,17 +37,20 @@ export function transformFunctionExpressionIntoStyleSheetObject(expr, context, c
   codeLineList[lastIdx] = codeLineList[lastIdx].substr(0, endColumn);
   codeLineList[0] = codeLineList[0].substr(startColumn);
   let es6Code = codeLineList.join('\n');
-  es6Code = 'const func = ' + es6Code;
-  // es6Code = '(' + es6Code + ')';
+  // es6Code = 'var cssInJS = ' + es6Code;
+  es6Code = 'result = (' + es6Code + ')( injectedContext )';
 
-	// console.log( es6Code );	//eslint-disable-line
+  // console.log( es6Code );	//eslint-disable-line
+  // console.log( '-------------------' );	//eslint-disable-line
 
   // It ensure to works even es6 code well
-  let codeWillRun = transform(es6Code, { presets: ['es2015-without-strict'] }).code;
-	// console.log( codeWillRun );	//eslint-disable-line
+  const itWillRun = transform(es6Code, { presets: ['es2015-without-strict'] });
+  // console.log( itWillRun.code );	//eslint-disable-line
+  // console.log( '');	//eslint-disable-line
+  // console.log( '');	//eslint-disable-line
 
   // codeWillRun = 'var func = ' + codeWillRun;
-  codeWillRun += '\nresult = func( injectedContext )';
+  // codeWillRun += '\nresult = func( injectedContext )';
 
   // errors will get ErrorConstructors like
   // EvalError, InternalError, RangeError, ReferenceError,
@@ -55,7 +58,7 @@ export function transformFunctionExpressionIntoStyleSheetObject(expr, context, c
   const sandbox = { result: null, injectedContext: context, errors: {} };
 
   const vmContext = new vm.createContext(sandbox);
-  const script = new vm.Script(codeWillRun);
+  const script = new vm.Script(itWillRun.code);
 
   try {
     script.runInContext(vmContext, sandbox);
