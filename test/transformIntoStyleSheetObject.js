@@ -30,61 +30,80 @@ describe('transformIntoStyleSheetObject', () => {
     testValidInput('()=>{ return {} }', {});
     testValidInput('()=>( {} )', {});
 
+
     testValidInput('{ foo: {} }', { foo: {} });
     testValidInput('function() { return { foo: {} } }', { foo: {} });
     testValidInput('()=>{ return { foo: {} } }', { foo: {} });
+    testValidInput('()=>({ foo: {} })', { foo: {} });
+
 
     testValidInput('{ "foo foo": {} }', { 'foo foo': {} });
     testValidInput('function() { return { "foo foo": {} } }', { 'foo foo': {} });
     testValidInput('()=>{ return { "foo foo": {} } }', { 'foo foo': {} });
+    testValidInput('()=>({ "foo foo": {} })', { 'foo foo': {} });
+
 
     testValidInput('{ foo: { bar: 123 } }', { foo: { bar: 123 } });
     testValidInput('function() { return { foo: { bar: 123 } } }', { foo: { bar: 123 } });
     testValidInput('()=>{ return { foo: { bar: 123 } } }', { foo: { bar: 123 } });
+    testValidInput('()=>({ foo: { bar: 123 } })', { foo: { bar: 123 } });
+
 
     testValidInput('{ foo: { bar: "baz" } }', { foo: { bar: 'baz' } });
     testValidInput('function() { return { foo: { bar: "baz" } } }', { foo: { bar: 'baz' } });
     testValidInput('()=>{ return { foo: { bar: "baz" } } }', { foo: { bar: 'baz' } });
+    testValidInput('()=>({ foo: { bar: "baz" } })', { foo: { bar: 'baz' } });
 
 
     testValidInput('{ foo: { bar: baz } }', { foo: { bar: 'BAZ' } }, { baz: 'BAZ' });
     testValidInput('function(context) { return { foo: { bar: context.baz } } }', { foo: { bar: 'BAZ' } }, { baz: 'BAZ' });
     testValidInput('(context)=>{ return { foo: { bar: context.baz } } }', { foo: { bar: 'BAZ' } }, { baz: 'BAZ' });
+    testValidInput('(context)=>({ foo: { bar: context.baz } })', { foo: { bar: 'BAZ' } }, { baz: 'BAZ' });
 
 
     testValidInput('{ foo: { bar: "baz" + "bam" } }', { foo: { bar: 'bazbam' } });
     testValidInput('function() { return { foo: { bar: "baz" + "bam" } } }', { foo: { bar: 'bazbam' } });
     testValidInput('()=>{ return { foo: { bar: "baz" + "bam" } } }', { foo: { bar: 'bazbam' } });
+    testValidInput('()=>({ foo: { bar: "baz" + "bam" } })', { foo: { bar: 'bazbam' } });
 
 
     testValidInput('{ foo: { bar: baz + " " + bam } }', { foo: { bar: 'BAZ BAM' } }, { baz: 'BAZ', bam: 'BAM' });
     testValidInput('function(context) { return { foo: { bar: context.baz + " " + context.bam } } }', { foo: { bar: 'BAZ BAM' } }, { baz: 'BAZ', bam: 'BAM' });
     testValidInput('(context)=>{ return { foo: { bar: context.baz + " " + context.bam } } }', { foo: { bar: 'BAZ BAM' } }, { baz: 'BAZ', bam: 'BAM' });
+    testValidInput('(context)=>({ foo: { bar: context.baz + " " + context.bam } })', { foo: { bar: 'BAZ BAM' } }, { baz: 'BAZ', bam: 'BAM' });
+    testValidInput('context=>({ foo: { bar: context.baz + " " + context.bam } })', { foo: { bar: 'BAZ BAM' } }, { baz: 'BAZ', bam: 'BAM' });
 
 
     testValidInput('{ foo: { bar: a * (b + c) + "px" } }', { foo: { bar: '14px' } }, { a: 2, b: 3, c: 4 });
     testValidInput('function(context) { return { foo: { bar: context.a * (context.b + context.c) + "px" } } }', { foo: { bar: '14px' } }, { a: 2, b: 3, c: 4 });
     testValidInput('(context)=>{ return { foo: { bar: context.a * (context.b + context.c) + "px" } } }', { foo: { bar: '14px' } }, { a: 2, b: 3, c: 4 });
+    testValidInput('(context)=>({ foo: { bar: context.a * (context.b + context.c) + "px" } })', { foo: { bar: '14px' } }, { a: 2, b: 3, c: 4 });
+    testValidInput('context=>({ foo: { bar: context.a * (context.b + context.c) + "px" } })', { foo: { bar: '14px' } }, { a: 2, b: 3, c: 4 });
 
 
     testValidInput('{ foo: { bar: a.b } }', { foo: { bar: 'c' } }, { a: { b: 'c' } });
     testValidInput('function(context) { return { foo: { bar: context.a.b } } }', { foo: { bar: 'c' } }, { a: { b: 'c' } });
     testValidInput('(context)=>{ return { foo: { bar: context.a.b } } }', { foo: { bar: 'c' } }, { a: { b: 'c' } });
+    testValidInput('(context)=>({ foo: { bar: context.a.b } })', { foo: { bar: 'c' } }, { a: { b: 'c' } });
+    testValidInput('context=>({ foo: { bar: context.a.b } })', { foo: { bar: 'c' } }, { a: { b: 'c' } });
 
 
     testValidInput('{ foo: { content: " " } }', { foo: { content: " " } });
     testValidInput('function() { return { foo: { content: " " } } }', { foo: { content: " " } });
     testValidInput('()=>{ return { foo: { content: " " } } }', { foo: { content: " " } });
+    testValidInput('()=>({ foo: { content: " " } })', { foo: { content: " " } });
 
 
     testValidInput('{ ["foo"]: {} }', { foo: {} });
     testValidInput('function() { return { ["foo"]: {} } }', { foo: {} });
     testValidInput('()=>{ return { ["foo"]: {} } }', { foo: {} });
+    testValidInput('()=>({ ["foo"]: {} })', { foo: {} });
 
 
     testValidInput('{ undefined: {} }', { undefined: {} });
     testValidInput('function() { return { undefined: {} } }', { undefined: {} });
     testValidInput('()=>{ return { undefined: {} } }', { undefined: {} });
+    testValidInput('()=>({ undefined: {} })', { undefined: {} });
 
 
     testValidInput(`{
@@ -122,6 +141,75 @@ describe('transformIntoStyleSheetObject', () => {
           'test 9': 'test 10'
         }
       }
+    });
+
+    testValidInput(`(context)=>({
+      foo: {
+        'bar': 'baz',
+        bam: 123
+      },
+
+      'test 1': {
+        test2: {
+          'test 3': {
+            test4: 'test5'
+          }
+        },
+
+        'test 6': 'test 7',
+
+        test8: {
+          'test 9': 'test 10'
+        }
+      }
+    })`, {
+      foo: {
+        'bar': 'baz',
+        bam: 123
+      },
+      'test 1': {
+        test2: {
+          'test 3': {
+            test4: 'test5'
+          }
+        },
+        'test 6': 'test 7',
+        test8: {
+          'test 9': 'test 10'
+        }
+      }
+    });
+
+    testValidInput(`context=>{
+
+      const { __ios__, __android__, env } = context;
+
+      const buttonSize = 100;
+      let marginList = [10,8,10,8];
+
+      if( __ios__ ) {
+        marginList = marginList.map( v=> v - 2 );
+      }
+
+      return {
+        button: {
+          width: buttonSize,
+          margin: marginList.map( v=>v+'px' ).join(' '),
+          color: __android__ ? 'red' : 'blue',
+          border: env === 'development' ? '2px solid red' : 'none'
+        },
+      };
+    }`, {
+      button: {
+        width: 100,
+        margin: '8px 6px 8px 6px',
+        color: 'blue',
+        border: 'none',
+      }
+    }, {
+      __ios__: true,
+      __android__: false,
+      env: 'production',
     });
   });
 

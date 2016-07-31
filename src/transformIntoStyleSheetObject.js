@@ -4,7 +4,7 @@ import extend from 'object-assign';
 import { types as t, transform } from 'babel-core';
 import generate from 'babel-generator';
 
-// preloading to fast test
+// preloading to make running fast
 require('babel-preset-es2015-without-strict');
 
 const isBlank = /^\s*$/;
@@ -25,7 +25,6 @@ export function transformFunctionExpressionIntoStyleSheetObject(expr, context, c
     'must be a function expression'
   );
 
-	// TODO: need file encoding test
   const startLine = expr.loc.start.line - 1;
   const endLine = expr.loc.end.line - 1;
   const startColumn = expr.loc.start.column;
@@ -37,22 +36,12 @@ export function transformFunctionExpressionIntoStyleSheetObject(expr, context, c
   codeLineList[lastIdx] = codeLineList[lastIdx].substr(0, endColumn);
   codeLineList[0] = codeLineList[0].substr(startColumn);
   let es6Code = codeLineList.join('\n');
-  // es6Code = 'var cssInJS = ' + es6Code;
   es6Code = 'result = (' + es6Code + ')( injectedContext )';
-
-  // console.log( es6Code );	//eslint-disable-line
-  // console.log( '-------------------' );	//eslint-disable-line
 
   // It ensure to works even es6 code well
   const itWillRun = transform(es6Code, { presets: ['es2015-without-strict'] });
-  // console.log( itWillRun.code );	//eslint-disable-line
-  // console.log( '');	//eslint-disable-line
-  // console.log( '');	//eslint-disable-line
 
-  // codeWillRun = 'var func = ' + codeWillRun;
-  // codeWillRun += '\nresult = func( injectedContext )';
-
-  // errors will get ErrorConstructors like
+  // 'errors' will take ErrorConstructors like
   // EvalError, InternalError, RangeError, ReferenceError,
   // SyntaxError, TypeError, URIError
   const sandbox = { result: null, injectedContext: context, errors: {} };
@@ -64,7 +53,7 @@ export function transformFunctionExpressionIntoStyleSheetObject(expr, context, c
     script.runInContext(vmContext, sandbox);
   } catch (err) {
     if (sandbox.errors.ReferenceError === err.constructor) {
-      assert(false, 'When use Function Expression to cssInJS, all references must be in the function scope');
+      assert(false, err + '\nWhen use the FunctionExpression for cssInJS, all references must be in the function scope');
     } else {
       assert(false, err + '\nUnkown error, check babel-plugin-css-in-js guide');
     }
