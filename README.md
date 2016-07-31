@@ -302,7 +302,7 @@ Example for a given context `{ MyColors: { green: '#00FF00' }, myUrl: 'path/to/i
 }
 ```
 
-## Dynamic Styles using Function Expression
+## Dynamic Style using Function Expression
 
 In order to write style rules dynamically, you can use Function Expression. FunctionExpression gives more freedom than ObjectExpression. It receives `context` object as first parameter, with this, you can do any programmatic operation, such as the condition statement or the iteration statement even. `es6` syntax is also available. One thing to keep in mind is that the bundle file extraction and js file transformation are conducted by style rule be returned from FunctionExpression.
 
