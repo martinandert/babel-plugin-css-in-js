@@ -162,7 +162,7 @@ describe('babel-plugin-css-in-js', () => {
       });
 
       testStyleRule(css, 'test-styles-foo', 'flex: 1');
-      testStyleRule(css, 'test-styles-foo', '-webkit-flex: 1');
+      testStyleRule(css, 'test-styles-foo', '-webkit-box-flex: 1');
       testStyleRule(css, 'test-styles-foo', '-ms-flex: 1');
     });
   });
@@ -176,7 +176,7 @@ describe('babel-plugin-css-in-js', () => {
       });
 
       testStyleRule(css, 'test-styles-foo', 'flex: 1');
-      testStyleRule(css, 'test-styles-foo', '-webkit-flex: 1');
+      testStyleRule(css, 'test-styles-foo', '-webkit-box-flex: 1');
       testStyleRule(css, 'test-styles-foo', '-ms-flex: 1');
     });
   });
