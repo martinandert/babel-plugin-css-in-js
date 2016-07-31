@@ -211,6 +211,30 @@ describe('transformIntoStyleSheetObject', () => {
       __android__: false,
       env: 'production',
     });
+
+    testValidInput(`context=>{
+
+      const { min } = context;
+      function max(a, b) {
+        return a > b ? a : b;
+      }
+
+      return {
+        button: {
+          width: max( 100, 90 ),
+          height: min( 50, 40 ),
+        },
+      };
+    }`, {
+      button: {
+        width: 100,
+        height: 40,
+      }
+    }, {
+      min: function( a, b ) {
+        return a < b ? a : b;
+      }
+    });
   });
 
   it('throws on invalid input', () => {
