@@ -21,7 +21,8 @@ function processStyle(css, name, spec, level, options) {
 function processRules(css, name, rules, level, options) {
   if (isEmpty(rules)) { return; }
 
-  css.push(indent(level) + '.' + generateClassName(name, options) + ' {');
+  const selector = name.charAt(0) === '$' ? name.substring(1) : ('.' + generateClassName(name, options));
+  css.push(indent(level) + selector + ' {');
 
   foreach(rules, (value, key) => {
     css.push(indent(level + 1) + buildCSSRule(key, value));

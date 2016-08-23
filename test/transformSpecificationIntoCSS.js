@@ -269,4 +269,30 @@ describe('transformSpecificationIntoCSS', () => {
       }
     `);
   });
+
+  it('supports global selectors', () => {
+    testCSS({
+      '$.foo': {
+        rules: {
+          fontFamily: 'Arial,Verdana,"Helvetica Neue",sans-serif',
+          margin: 10,
+          padding: '0 20px'
+        }
+      },
+      '$body': {
+        rules: {
+          border: 'solid 1px black'
+        }
+      }
+    }, css`
+      .foo {
+        font-family: Arial,Verdana,"Helvetica Neue",sans-serif;
+        margin: 10px;
+        padding: 0 20px;
+      }
+      body {
+        border: solid 1px black;
+      }
+    `);
+  });
 });
