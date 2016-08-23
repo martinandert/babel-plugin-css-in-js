@@ -62,7 +62,7 @@ function processProperty(key, value, result, context) {
 
     result[name] = -value.argument.value;
   } else {
-    assert(false, 'invalid value expression type');
+    assert(false, `unexpected ${value.type} at ${value.loc.start.line}:${value.loc.start.column}`);
   }
 }
 
