@@ -737,6 +737,23 @@ describe('transformStyleSheetObjectIntoSpecification', () => {
         mediaQueries: {},
       }
     });
+
+
+    testValidInput({
+      '$  html,  body ': {
+        width: 150,
+        margin: 'auto'
+      }
+    }, {
+      '$  html,  body ': {
+        rules: {
+          width: 150,
+          margin: 'auto'
+        },
+        selectors: {},
+        mediaQueries: {},
+      }
+    });
   });
 
   it('throws on invalid input', () => {

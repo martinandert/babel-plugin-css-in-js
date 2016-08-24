@@ -5,7 +5,7 @@ import splitSelector from './utils/splitSelector';
 const isMediaQueryDeclaration = /^@/;
 const hasAttachedSelector = /[^:\[]+[:\[]/;
 const isStandaloneSelector = /^[:\[]/;
-const isValidStyleName = /^[_a-zA-Z]+[ _a-zA-Z0-9-]*[_a-zA-Z0-9-]*$/;
+const isValidStyleName = /^([_a-zA-Z]+[ _a-zA-Z0-9-]*[_a-zA-Z0-9-]*)|(\$[_a-zA-Z0-9-\s,\.]+)$/;
 
 export default function transformStyleSheetObjectIntoSpecification(content) {
   assertPlainObject(content);
