@@ -9,6 +9,22 @@ Tags:
 - [Internal]
 - [Polish]
 
+## v1.4.0 (August 24, 2016)
+
+- **New Feature**
+  - Support function expressions as argument to `cssInJS` (#15)
+- **Internal**
+  - Add Node.js v6 to Travis
+
+## v1.3.0 (August 24, 2016)
+
+- **New Feature**
+  - Support for global selectors (#19)
+- **Polish**
+  - More helpful error messages (#18)
+- **Bug Fix**
+  - Update tests to support -webkit-box-flex (#17)
+
 ## v1.2.3 (April 27, 2016)
 
 - **Bug Fix**
