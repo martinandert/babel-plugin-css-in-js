@@ -302,6 +302,155 @@ Example for a given context `{ MyColors: { green: '#00FF00' }, myUrl: 'path/to/i
 }
 ```
 
+## Dynamic Style using Function Expression
+
+In order to write style rules dynamically, you can use Function Expression. FunctionExpression gives more freedom than ObjectExpression. It receives `context` object as first parameter, with this, you can do any programmatic operation, such as the condition statement or the iteration statement even. `es6` syntax is also available. One thing to keep in mind is that the bundle file extraction and js file transformation are conducted by style rule be returned from FunctionExpression.
+
+When you want to show different styles based on whether user environment is android or ios in order to support cross platform, when you want to support various themes like dark, light theme. or when you want to see different styles according to production, development environement, you can use as below:
+
+```js
+const style = cssInJS( (context)=>{
+
+  const { __IOS__, __ANDROID__, __ENV__, theme } = context;
+
+  const buttonSize = 100;
+  let marginList = [10,8,10,8];
+
+  if( __IOS__ ) {
+    marginList = marginList.map( v=> v - 2 );
+  }
+
+  return {
+    button: {
+      width: buttonSize,
+      margin: marginList.map( v=>v+'px' ).join(' '),
+      color: __ANDROID__ ? 'red' : 'blue',
+      border: __ENV__ === 'development' ? '2px solid red' : 'none'
+    },
+
+    buttonBox: {
+      backgroundColor: theme === 'dark' ? 'black' : 'white';
+    }
+  };
+});
+```
+
+`context` in the above code, can be passed from babel loader setting like this:
+
+```js
+// webpack.config.js
+
+const env = process.env.NODE_ENV;       // this build env can be set dynamically
+const platform = process.env.PLATFORM;  // this build env can be set dynamically
+const theme = 'dark';                   // this build env can be set dynamically
+
+// to dynamic setting, it is recommended to do set in js file instaed of .babelrc
+const babelPluginCSSInJS = [   
+  ["css-in-js", {
+    compressClassNames: env === 'production',
+    vendorPrefixes: true,
+
+    // You can get `css bundle` files for each platform or theme
+    bundleFile: `build/bundle.${theme}.${platform}.css`,
+
+    context: {
+      __IOS__: platform === 'ios',          // it can be set dynamically
+      __ANDROID__: platform === 'android',  // it can be set dynamically
+      __ENV__: env,                         // it can be set dynamically
+      theme: theme,                         // it can be set dynamically
+    },
+
+    // or you can load from other file
+    // context: require('./cssInJSContext.js'),
+  }],
+];
+
+module.exports = {
+  ...
+
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      __ENV__: env,
+      __IOS__: platform === 'ios',
+      __ANDROID__: platform === 'android',
+    }),
+  ],
+  module: {
+    loaders: [{
+      test: /\.jsx?$/,
+      exclude: /node_modules/,
+      loader: 'babel',
+      query: {
+        presets: ["es2015","stage-0","react"],
+        plugins: [
+          "transform-decorators-legacy",
+          "react-hot-loader/babel",
+          babelPluginCSSInJS,
+        ]
+      },
+    }],
+  },
+
+  ...
+}
+```
+
+Note: It should only be a function able to perform in a completely blocked nodejs [VM](https://nodejs.org/api/vm.html) sandbox environment, reveiving only the context object. Therefore you cannot use other module using require, import within FunctionExpression. Also you cannot access any references outside FunctionExpression.
+
+Here are another example, carefully review the `Wrong!` comments:
+```js
+const buttonNum = 3;
+
+const style = cssInJS( (context)=>{ // ------ start of the FunctionExpression scope
+
+  const defaultColor = context.defaultColor;   // OK. You can access context's all values
+  const { buttonWidth } = context;     // OK. You can use es6 syntax
+  const _ = require('underscore');     // Wrong! You cannot load other module using require, import
+
+  const aWidth = 80;                   // OK
+  const bWidth = 100;                  // OK
+  const aHeight = 40;                  // OK
+  const bHeight = 50;                  // OK
+
+  function max(a, b) {                 // OK. You can have inner function even
+    return a > b ? a : b;
+  }
+
+  const min = context.min;             // OK. function can be passed from context
+                                       // Note! But now function can't be passed from '.babelrc' setting file
+                                       // Use webpack loader setting
+
+  return {
+    buttonBox: {
+      width: buttonNum * buttonWidth,  // Wrong! 'buttonNum' reference is outside FunctionExpression scope
+      height: buttonWidth * 1.5,       // OK
+      backgroundColor: defaultColor,   // OK
+    },
+    abutton: {
+      width: aWidth,                   // OK. 'aWidth' reference is inside FunctionExpression scope
+      width: aHeight,                  // OK
+      backgroundColor: defaultColor,   // OK
+    },
+    bbutton: {
+      width: bWidth,                   // OK. 'bWidth' reference is inside FunctionExpression scope
+      width: bHeight,                  // OK
+      backgroundColor: defaultColor,   // OK
+    },
+    cbutton: {
+      backgroundColor: defaultColor,   // OK
+
+      width: max( aWidth, bWidth ),    // OK. 'max' is inside FunctionExpression scope
+      height: min( aHeight, bHeight ), // OK. 'min' is inside FunctionExpression scope
+      // As long as reference is inside FunctionExpression scope, you can use any references you want
+    },
+  };
+});   // ------------------------------------ end of the FunctionExpression scope!
+```
+
+In the above `Wrong!` case, you will encounter `When use the FunctionExpression for cssInJS, all references must be in the function scope` error.
+
+
 
 ## Example
 

@@ -36,11 +36,12 @@
     "foreach": "^2.0.5",
     "mkdirp": "^0.5.1",
     "object-assign": "^4.0.1",
-    "postcss": "^5.0.12"
+    "postcss": "^5.0.12",
+    "babel-core": "^6.3.15",
+    "babel-preset-es2015-without-strict": "0.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.3.15",
-    "babel-core": "^6.3.15",
     "babel-eslint": "^4.1.6",
     "babel-istanbul": "^0.5.9",
     "babel-plugin-add-module-exports": "^0.1.1",

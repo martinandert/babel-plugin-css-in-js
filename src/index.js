@@ -5,7 +5,7 @@ import { writeFileSync } from 'fs';
 import { relative, join, dirname, resolve } from 'path';
 import { sync as mkDirPSync } from 'mkdirp';
 
-import transformObjectExpressionIntoStyleSheetObject from './transformObjectExpressionIntoStyleSheetObject';
+import transformIntoStyleSheetObject from './transformIntoStyleSheetObject';
 import transformStyleSheetObjectIntoSpecification from './transformStyleSheetObjectIntoSpecification';
 import generateClassName from './generateClassName';
 import buildCSS from './buildCSS';
@@ -96,7 +96,7 @@ function visitor(context) {
 
       assert(expr, 'cssInJS(...) call is missing an argument');
 
-      const obj = transformObjectExpressionIntoStyleSheetObject(expr, this.cssInJS.options.context);
+      const obj = transformIntoStyleSheetObject(expr, this.cssInJS.options.context, path.hub.file.code);
       const sheet = transformStyleSheetObjectIntoSpecification(obj);
 
       this.cssInJS.stylesheets[sheetId] = sheet;
