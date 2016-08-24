@@ -127,7 +127,7 @@ function processRule(rules, key, value) {
 }
 
 function initStyleSpec(styles, name) {
-  assert(isValidStyleName.test(name), 'style name is invalid');
+  assert(isValidStyleName.test(name), `style name is invalid: ${name}`);
 
   styles[name] = styles[name] || { rules: {}, selectors: {}, mediaQueries: {} };
   return styles[name];

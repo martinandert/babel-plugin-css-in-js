@@ -38,7 +38,7 @@ describe('babel-plugin-css-in-js', () => {
 
     const hasClassNameWithRule = new RegExp(`\\.${className}\\s*\\{[^\\}]*?${rule}`);
 
-    assert(hasClassNameWithRule.test(css));
+    assert(hasClassNameWithRule.test(css), `No rule ${rule} found for ${className}`);
   }
 
   it('does nothing if no "cssInJS" call is present', () => {
