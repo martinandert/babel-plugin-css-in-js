@@ -78,6 +78,19 @@ describe('babel-plugin-css-in-js', () => {
     assert(css.indexOf('.unknown-styles-foo') > -1);
   });
 
+  it('works with function expression as argument', () => {
+    testTransformed({
+      from: 'var styles = cssInJS(function() { return { foo: { margin: 0 }, "$body": { padding: 0 } }; });',
+      to:   'var styles = { foo: "test-styles-foo" };'
+    });
+  });
+
+  it('raises error if argument is neither a object expression nor a function expression', () => {
+    assert.throws(() => {
+      transform('var styles = cssInJS(123);', makeOptions());
+    });
+  });
+
   describe('with compressClassNames option set to true', () => {
     beforeEach(() => {
       clearCache({});

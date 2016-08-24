@@ -21,6 +21,7 @@ const DEFAULT_OPTIONS = {
   context: null,
   cacheDir: 'tmp/cache/',
   bundleFile: 'bundle.css',
+  transformOptions: { presets: ['es2015'] },
 };
 
 export default function plugin(context) {
@@ -96,7 +97,7 @@ function visitor(context) {
 
       assert(expr, 'cssInJS(...) call is missing an argument');
 
-      const obj = transformIntoStyleSheetObject(expr, this.cssInJS.options.context, path.hub.file.code);
+      const obj = transformIntoStyleSheetObject(expr, this.cssInJS.options.context, this.cssInJS.options.transformOptions);
       const sheet = transformStyleSheetObjectIntoSpecification(obj);
 
       this.cssInJS.stylesheets[sheetId] = sheet;
