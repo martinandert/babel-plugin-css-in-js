@@ -256,11 +256,11 @@ describe('transformIntoStyleSheetObject', () => {
     testInvalidInput('{ foo: { bar: "" } }',    /string value cannot be blank/);
     testInvalidInput('{ foo: { bar: "  " } }',  /string value cannot be blank/);
 
-    testInvalidInput('{ foo: { bar: [] } }',              /invalid value expression type/);
-    testInvalidInput('{ foo: { bar: Math.PI } }',         /invalid value expression type/);
-    testInvalidInput('{ foo: { bar: undefined } }',       /invalid value expression type/);
-    testInvalidInput('{ foo: { bar: missing + "bam" } }', /invalid value expression type/);
-    testInvalidInput('{ foo: { bar: baz[0] } }',          /invalid value expression type/);
+    testInvalidInput('{ foo: { bar: [] } }',              /unexpected/);
+    testInvalidInput('{ foo: { bar: Math.PI } }',         /unexpected/);
+    testInvalidInput('{ foo: { bar: undefined } }',       /unexpected/);
+    testInvalidInput('{ foo: { bar: missing + "bam" } }', /unexpected/);
+    testInvalidInput('{ foo: { bar: baz[0] } }',          /unexpected/);
 
     testInvalidInput('{ [null]: {} }',  /key must be a string or identifier/);
     testInvalidInput('{ [123]: {} }',   /key must be a string or identifier/);
