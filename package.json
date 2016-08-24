@@ -10,6 +10,7 @@
     "bundler"
   ],
   "author": "Martin Andert",
+  "contributors": ["Stefano J. Attardi"],
   "license": "MIT",
   "repository": {
     "type": "git",
