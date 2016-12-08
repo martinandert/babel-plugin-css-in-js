@@ -18,7 +18,7 @@ Tags:
 ## v1.4.1 (December 8, 2016)
 
 - **Bug Fix**
-  - Don't return subselector expressions as style names` (#23)
+  - Don't return subselector expressions as style names (#23)
 - **Documentation**
   - Add section about global styles to README
 
