@@ -78,6 +78,16 @@ describe('babel-plugin-css-in-js', () => {
     assert(css.indexOf('.unknown-styles-foo') > -1);
   });
 
+  it('works with subselectors', () => {
+    const css = testTransformed({
+      from: 'var styles = cssInJS({ foo: { marginTop: 10 }, "foo p": { left: 0 }, "foo .bar": { color: "red" } });',
+      to:   'var styles = { foo: "test-styles-foo" };'
+    });
+
+    assert(css.indexOf('.test-styles-foo p {') > -1);
+    assert(css.indexOf('.test-styles-foo .bar {') > -1);
+  });
+
   it('works with function expression as argument', () => {
     testTransformed({
       from: 'var styles = cssInJS(function() { return { foo: { margin: 0 }, "$body": { padding: 0 } }; });',

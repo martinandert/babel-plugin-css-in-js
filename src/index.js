@@ -105,9 +105,10 @@ function visitor(context) {
       const gcnOptions = extend({}, this.cssInJS.options, { prefixes: [this.cssInJS.filename, sheetId] });
 
       const properties = Object.keys(sheet).reduce((memo, styleId) => {
-        if (styleId.charAt(0) === '$') {
+        if (styleId.charAt(0) === '$' || styleId.indexOf(' ') > 0) {
           return memo;
         }
+
         return memo.concat(
           t.objectProperty(
             t.identifier(styleId),
