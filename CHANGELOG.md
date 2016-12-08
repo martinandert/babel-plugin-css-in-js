@@ -9,6 +9,19 @@ Tags:
 - [Internal]
 - [Polish]
 
+## Unreleased
+
+- **Internal**
+  - Remove Node.js v4 and v5 from Travis
+  - Add Node.js v7 to Travis
+
+## v1.4.1 (December 8, 2016)
+
+- **Bug Fix**
+  - Don't return subselector expressions as style names` (#23)
+- **Documentation**
+  - Add section about global styles to README
+
 ## v1.4.0 (August 24, 2016)
 
 - **New Feature**
