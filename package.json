@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-css-in-js",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A plugin for Babel v6 which transforms inline styles defined in JavaScript modules into class names so they become available to, e.g. the `className` prop of React elements. While transforming, the plugin processes all JavaScript style definitions found and bundles them up into a CSS file, ready to be requested from your web server.",
   "main": "lib/index.js",
   "keywords": [
@@ -10,7 +10,9 @@
     "bundler"
   ],
   "author": "Martin Andert",
-  "contributors": ["Stefano J. Attardi"],
+  "contributors": [
+    "Stefano J. Attardi"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
