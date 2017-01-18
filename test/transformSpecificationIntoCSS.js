@@ -283,7 +283,13 @@ describe('transformSpecificationIntoCSS', () => {
         rules: {
           border: 'solid 1px black'
         }
-      }
+      },
+      '.bar': {
+        parent: '.foo',
+        rules: {
+          color: 'red'
+        }
+      },
     }, css`
       .foo {
         font-family: Arial,Verdana,"Helvetica Neue",sans-serif;
@@ -292,6 +298,9 @@ describe('transformSpecificationIntoCSS', () => {
       }
       body {
         border: solid 1px black;
+      }
+      .foo .bar {
+        color: red;
       }
     `);
   });

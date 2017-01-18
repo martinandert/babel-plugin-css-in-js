@@ -754,7 +754,28 @@ describe('transformStyleSheetObjectIntoSpecification', () => {
         mediaQueries: {},
       }
     });
+
+
+    testValidInput({
+      '$.foo': {
+        bar: {
+          color: 'red',
+          padding: 10
+        },
+      },
+    }, {
+      bar: {
+        parent: '.foo',
+        rules: {
+          width: 150,
+          margin: 'auto'
+        },
+        selectors: {},
+        mediaQueries: {},
+      }
+    });
   });
+
 
   it('throws on invalid input', () => {
     testInvalidInput("foo",     /value must be a plain object/);
