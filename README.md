@@ -7,7 +7,7 @@
 
 A plugin for Babel v6 which transforms inline styles defined in JavaScript modules into class names so they become available to, e.g. the `className` prop of React elements. While transforming, the plugin processes all JavaScript style definitions found and bundles them up into a CSS file, ready to be requested from your web server.
 
-babel-plugin-css-in-js works seamlessly on both client and server. It has built-in support for media queries, pseudo-classes, and attribute selectors. The plugin's options allow you to configure vendor-prefixing, minification, and class name compression.
+babel-plugin-css-in-js works seamlessly on both client and server. It has built-in support for media queries, pseudo-classes, attribute selectors, and theming. The plugin's options allow you to configure vendor-prefixing, minification, and class name compression.
 
 If you're impatient, [visit the live demo](http://babel-plugin-css-in-js.martinandert.com/). The source code for it can be found [in the example directory](example/).
 
@@ -300,6 +300,44 @@ Example for a given context `{ MyColors: { green: '#00FF00' }, myUrl: 'path/to/i
     borderWidth: 42 + 'px',
     backgroundImage: 'url(' + myUrl + ')'
   }
+}
+```
+
+**Basic theming via nesting within global selectors**
+
+You can nest your styles within another selector which is prefixed with `$`. These "global" selectors will be prepended (without the dollar sign of course) to the styles when generating the CSS. Nested styles also support pseudo-classes, attribute selectors and media queries. Example:
+
+```js
+{
+  myButton: {
+    color: 'black'
+  },
+  '$body.red-theme': {
+    myButton: {
+      color: 'red'
+    }
+  },
+  '$.blue >': {
+    myButton: {
+      color: 'blue';
+    }
+  }
+}
+```
+
+CSS output (assuming `b1` will become the generated class name for `myButton`):
+
+```css
+.b1 {
+  color: black;
+}
+
+body.red-theme .b1 {
+  color: red;
+}
+
+.blue > .b1 {
+  color: blue;
 }
 ```
 

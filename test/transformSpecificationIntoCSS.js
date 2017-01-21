@@ -295,4 +295,132 @@ describe('transformSpecificationIntoCSS', () => {
       }
     `);
   });
+
+  it('supports parent nesting', () => {
+    testCSS({
+      foo: {
+        rules: {
+          padding: 0,
+        },
+        selectors: {},
+        mediaQueries: {},
+        parents: {
+          'body.x': {
+            rules: {
+              margin: 0,
+              fontFamily: 'Arial,Verdana,sans-serif',
+            },
+            selectors: {
+              ':first-child': {
+                rules: {
+                  border: 'none',
+                  margin: 1,
+                },
+              },
+            },
+            mediaQueries: {
+              'media only screen and (min-width: 700px)': {
+                rules: {
+                  lineHeight: 1.53,
+                  display: 'inline-block'
+                },
+                selectors: {
+                  ':focus': {
+                    rules: {
+                      outline: 'none'
+                    }
+                  }
+                }
+              }
+            },
+          },
+          'body.y': {
+            rules: {
+              margin: 10,
+            },
+            selectors: {},
+            mediaQueries: {},
+          },
+        },
+      },
+      bar: {
+        rules: {},
+        selectors: {},
+        mediaQueries: {},
+        parents: {
+          'body.x': {
+            rules: {
+              border: 'solid 1px black',
+              padding: 15,
+            },
+            selectors: {
+              ':hover': {
+                rules: {
+                  borderColor: '#333',
+                  color: 'blue',
+                },
+              },
+            },
+            mediaQueries: {},
+          },
+        },
+      },
+      baz: {
+        rules: {},
+        selectors: {},
+        mediaQueries: {},
+        parents: {
+          'body.x': {
+            rules: {},
+            selectors: {},
+            mediaQueries: {
+              'media only screen and (min-width: 120px)': {
+                rules: {
+                  color: 'red',
+                },
+                selectors: {},
+              },
+            },
+          },
+        },
+      },
+    }, css`
+      .foo {
+        padding: 0px;
+      }
+      body.x .foo {
+        margin: 0px;
+        font-family: Arial,Verdana,sans-serif;
+      }
+      body.x .foo:first-child {
+        border: none;
+        margin: 1px;
+      }
+      @media only screen and (min-width: 700px) {
+        body.x .foo {
+          line-height: 1.53;
+          display: inline-block;
+        }
+        body.x .foo:focus {
+          outline: none;
+        }
+      }
+      body.y .foo {
+        margin: 10px;
+      }
+      body.x .bar {
+        border: solid 1px black;
+        padding: 15px;
+      }
+      body.x .bar:hover {
+        border-color: #333;
+        color: blue;
+      }
+      @media only screen and (min-width: 120px) {
+        body.x .baz {
+          color: red;
+        }
+      }
+    `);
+  });
 });

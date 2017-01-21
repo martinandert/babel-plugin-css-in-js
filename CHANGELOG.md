@@ -11,6 +11,8 @@ Tags:
 
 ## Unreleased
 
+- **New Feature**
+  - Support basic theming via nesting in global selectors
 - **Internal**
   - Remove Node.js v4 and v5 from Travis
   - Add Node.js v7 to Travis

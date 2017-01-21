@@ -95,6 +95,15 @@ describe('babel-plugin-css-in-js', () => {
     });
   });
 
+  it('works with parent nesting', () => {
+    const css = testTransformed({
+      from: 'var styles = cssInJS({ "$body.my-theme": { foo: { marginTop: 10 } } });',
+      to:   'var styles = { foo: "test-styles-foo" };'
+    });
+
+    assert(css.indexOf('body.my-theme .test-styles-foo {') > -1);
+  });
+
   it('raises error if argument is neither a object expression nor a function expression', () => {
     assert.throws(() => {
       transform('var styles = cssInJS(123);', makeOptions());

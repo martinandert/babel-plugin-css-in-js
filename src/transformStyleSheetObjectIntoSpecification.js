@@ -7,28 +7,35 @@ const hasAttachedSelector = /[^:\[]+[:\[]/;
 const isStandaloneSelector = /^[:\[]/;
 const isValidStyleName = /^([_a-zA-Z]+[ _a-zA-Z0-9-]*[_a-zA-Z0-9-]*)|(\$[_a-zA-Z0-9-\s,\.]+)$/;
 
-export default function transformStyleSheetObjectIntoSpecification(content) {
+export default function transformStyleSheetObjectIntoSpecification(content, styles = {}, parent) {
   assertPlainObject(content);
-
-  const styles = {};
 
   foreach(content, (value, key) => {
     if (isMediaQueryDeclaration.test(key)) {
-      processMediaQuery(styles, key.substring(1), value);
+      processMediaQuery(styles, key.substring(1), value, parent);
     } else if (isStandaloneSelector.test(key)) {
       assert(false, 'stand-alone selectors are not allowed at the top-level');
     } else if (hasAttachedSelector.test(key)) {
       const [styleName, selectorName] = splitSelector(key);
-      processStyleAndSelector(styles, styleName, selectorName, value);
+      processStyleAndSelector(styles, styleName, selectorName, value, parent);
+    } else if (key.charAt(0) === '$') {
+      const firstSubKey = Object.keys(value)[0];
+
+      if (!isPlainObject(value[firstSubKey])) {
+        // needs to be deprecated
+        processStyle(styles, key, value);
+      } else {
+        transformStyleSheetObjectIntoSpecification(value, styles, key.substring(1));
+      }
     } else {
-      processStyle(styles, key, value);
+      processStyle(styles, key, value, parent);
     }
   });
 
   return styles;
 }
 
-function processMediaQuery(styles, mediaQueryName, content) {
+function processMediaQuery(styles, mediaQueryName, content, parent) {
   assertPlainObject(content);
 
   foreach(content, (value, key) => {
@@ -38,23 +45,23 @@ function processMediaQuery(styles, mediaQueryName, content) {
       assert(false, 'stand-alone selectors are not allowed in top-level media queries');
     } else if (hasAttachedSelector.test(key)) {
       const [styleName, selectorName] = splitSelector(key);
-      processStyleAndMediaQueryAndSelector(styles, styleName, mediaQueryName, selectorName, value);
+      processStyleAndMediaQueryAndSelector(styles, styleName, mediaQueryName, selectorName, value, parent);
     } else {
-      processStyleAndMediaQuery(styles, key, mediaQueryName, value);
+      processStyleAndMediaQuery(styles, key, mediaQueryName, value, parent);
     }
   });
 }
 
-function processStyle(styles, styleName, content) {
+function processStyle(styles, styleName, content, parent) {
   assertPlainObject(content);
 
-  const style = initStyleSpec(styles, styleName);
+  const style = initStyleSpec(styles, styleName, parent);
 
   foreach(content, (value, key) => {
     if (isMediaQueryDeclaration.test(key)) {
-      processStyleAndMediaQuery(styles, styleName, key.substring(1), value);
+      processStyleAndMediaQuery(styles, styleName, key.substring(1), value, parent);
     } else if (isStandaloneSelector.test(key)) {
-      processStyleAndSelector(styles, styleName, key, value);
+      processStyleAndSelector(styles, styleName, key, value, parent);
     } else if (hasAttachedSelector.test(key)) {
       assert(false, 'styles cannot be nested into each other');
     } else {
@@ -63,17 +70,17 @@ function processStyle(styles, styleName, content) {
   });
 }
 
-function processStyleAndMediaQuery(styles, styleName, mediaQueryName, content) {
+function processStyleAndMediaQuery(styles, styleName, mediaQueryName, content, parent) {
   assertPlainObject(content);
 
-  const style = initStyleSpec(styles, styleName);
+  const style = initStyleSpec(styles, styleName, parent);
   const mediaQuery = initMediaQuerySpec(style.mediaQueries, mediaQueryName);
 
   foreach(content, (value, key) => {
     if (isMediaQueryDeclaration.test(key)) {
       assert(false, 'media queries cannot be nested into each other');
     } else if (isStandaloneSelector.test(key)) {
-      processStyleAndMediaQueryAndSelector(styles, styleName, mediaQueryName, key, value);
+      processStyleAndMediaQueryAndSelector(styles, styleName, mediaQueryName, key, value, parent);
     } else if (hasAttachedSelector.test(key)) {
       assert(false, 'styles cannot be nested into each other');
     } else {
@@ -82,10 +89,10 @@ function processStyleAndMediaQuery(styles, styleName, mediaQueryName, content) {
   });
 }
 
-function processStyleAndSelector(styles, styleName, selectorName, content) {
+function processStyleAndSelector(styles, styleName, selectorName, content, parent) {
   assertPlainObject(content);
 
-  const style = initStyleSpec(styles, styleName);
+  const style = initStyleSpec(styles, styleName, parent);
   const selector = initSelectorSpec(style.selectors, selectorName);
 
   foreach(content, (value, key) => {
@@ -101,10 +108,10 @@ function processStyleAndSelector(styles, styleName, selectorName, content) {
   });
 }
 
-function processStyleAndMediaQueryAndSelector(styles, styleName, mediaQueryName, selectorName, content) {
+function processStyleAndMediaQueryAndSelector(styles, styleName, mediaQueryName, selectorName, content, parent) {
   assert(isPlainObject(content), 'style value must be a plain object');
 
-  const style = initStyleSpec(styles, styleName);
+  const style = initStyleSpec(styles, styleName, parent);
   const mediaQuery = initMediaQuerySpec(style.mediaQueries, mediaQueryName);
   const selector = initSelectorSpec(mediaQuery.selectors, selectorName);
 
@@ -126,10 +133,17 @@ function processRule(rules, key, value) {
   rules[key] = value;
 }
 
-function initStyleSpec(styles, name) {
+function initStyleSpec(styles, name, parent) {
   assert(isValidStyleName.test(name), `style name is invalid: ${name}`);
 
   styles[name] = styles[name] || { rules: {}, selectors: {}, mediaQueries: {} };
+
+  if (parent) {
+    styles[name].parents = styles[name].parents || {};
+
+    return initStyleSpec(styles[name].parents, parent);
+  }
+
   return styles[name];
 }
 

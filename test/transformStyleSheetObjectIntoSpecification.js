@@ -738,7 +738,6 @@ describe('transformStyleSheetObjectIntoSpecification', () => {
       }
     });
 
-
     testValidInput({
       '$  html,  body ': {
         width: 150,
@@ -753,6 +752,196 @@ describe('transformStyleSheetObjectIntoSpecification', () => {
         selectors: {},
         mediaQueries: {},
       }
+    });
+
+    testValidInput({
+      foo: {
+        padding: 0,
+      },
+      '$body.x': {
+        foo: {
+          margin: 0,
+          fontFamily: 'Arial,Verdana,sans-serif',
+          '@media only screen and (min-width: 120px)': {
+            lineHeight: 1.23,
+            display: 'block',
+          },
+          '@media only screen and (min-width: 700px)': {
+            lineHeight: 1.53,
+            display: 'inline-block',
+            ':focus': {
+              outline: 'none',
+            },
+          },
+        },
+        bar: {
+          border: 'solid 1px black',
+          padding: 15,
+
+          ':hover': {
+            borderColor: '#333',
+            color: 'blue',
+          },
+        },
+        'foo:first-child': {
+          border: 'none',
+          margin: 1,
+        },
+        '@media only screen and (min-width: 120px)': {
+          foo: {
+            display: 'inline',
+            padding: 0,
+            ':focus': {
+              cursor: 'pointer',
+              fontSize: 12,
+            },
+          },
+          'foo:hover': {
+            margin: 0,
+          },
+          baz: {
+            color: 'red',
+          },
+          'bam:active': {
+            color: 'green',
+          },
+        },
+      },
+      '$body.y': {
+        foo: {
+          margin: 10,
+        },
+      },
+    }, {
+      foo: {
+        rules: {
+          padding: 0,
+        },
+        selectors: {},
+        mediaQueries: {},
+        parents: {
+          'body.x': {
+            rules: {
+              margin: 0,
+              fontFamily: 'Arial,Verdana,sans-serif',
+            },
+            selectors: {
+              ':first-child': {
+                rules: {
+                  border: 'none',
+                  margin: 1,
+                },
+              },
+            },
+            mediaQueries: {
+              'media only screen and (min-width: 120px)': {
+                rules: {
+                  lineHeight: 1.23,
+                  display: 'inline',
+                  padding: 0,
+                },
+                selectors: {
+                  ':focus': {
+                    rules: {
+                      cursor: 'pointer',
+                      fontSize: 12,
+                    },
+                  },
+                  ':hover': {
+                    rules: {
+                      margin: 0,
+                    },
+                  },
+                },
+              },
+              'media only screen and (min-width: 700px)': {
+                rules: {
+                  lineHeight: 1.53,
+                  display: 'inline-block'
+                },
+                selectors: {
+                  ':focus': {
+                    rules: {
+                      outline: 'none'
+                    }
+                  }
+                }
+              }
+            },
+          },
+          'body.y': {
+            rules: {
+              margin: 10,
+            },
+            selectors: {},
+            mediaQueries: {},
+          },
+        },
+      },
+      bar: {
+        rules: {},
+        selectors: {},
+        mediaQueries: {},
+        parents: {
+          'body.x': {
+            rules: {
+              border: 'solid 1px black',
+              padding: 15,
+            },
+            selectors: {
+              ':hover': {
+                rules: {
+                  borderColor: '#333',
+                  color: 'blue',
+                },
+              },
+            },
+            mediaQueries: {},
+          },
+        },
+      },
+      baz: {
+        rules: {},
+        selectors: {},
+        mediaQueries: {},
+        parents: {
+          'body.x': {
+            rules: {},
+            selectors: {},
+            mediaQueries: {
+              'media only screen and (min-width: 120px)': {
+                rules: {
+                  color: 'red',
+                },
+                selectors: {},
+              },
+            },
+          },
+        },
+      },
+      bam: {
+        rules: {},
+        selectors: {},
+        mediaQueries: {},
+        parents: {
+          'body.x': {
+            rules: {},
+            selectors: {},
+            mediaQueries: {
+              'media only screen and (min-width: 120px)': {
+                rules: {},
+                selectors: {
+                  ':active': {
+                    rules: {
+                      color: 'green',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
   });
 
