@@ -133,15 +133,17 @@ function processRule(rules, key, value) {
   rules[key] = value;
 }
 
-function initStyleSpec(styles, name, parent) {
-  assert(isValidStyleName.test(name), `style name is invalid: ${name}`);
+function initStyleSpec(styles, name, parent, checkValid = true) {
+  if (checkValid) {
+    assert(isValidStyleName.test(name), `style name is invalid: ${name}`);
+  }
 
   styles[name] = styles[name] || { rules: {}, selectors: {}, mediaQueries: {} };
 
   if (parent) {
     styles[name].parents = styles[name].parents || {};
 
-    return initStyleSpec(styles[name].parents, parent);
+    return initStyleSpec(styles[name].parents, parent, null, false);
   }
 
   return styles[name];

@@ -334,7 +334,7 @@ describe('transformSpecificationIntoCSS', () => {
               }
             },
           },
-          'body.y': {
+          '.y >': {
             rules: {
               margin: 10,
             },
@@ -405,7 +405,7 @@ describe('transformSpecificationIntoCSS', () => {
           outline: none;
         }
       }
-      body.y .foo {
+      .y > .foo {
         margin: 10px;
       }
       body.x .bar {

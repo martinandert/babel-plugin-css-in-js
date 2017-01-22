@@ -807,7 +807,7 @@ describe('transformStyleSheetObjectIntoSpecification', () => {
           },
         },
       },
-      '$body.y': {
+      '$.y >': {
         foo: {
           margin: 10,
         },
@@ -869,7 +869,7 @@ describe('transformStyleSheetObjectIntoSpecification', () => {
               }
             },
           },
-          'body.y': {
+          '.y >': {
             rules: {
               margin: 10,
             },
