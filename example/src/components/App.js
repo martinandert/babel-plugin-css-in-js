@@ -1,5 +1,6 @@
 import React from 'react';
 import MediaQueries from './MediaQueries';
+import Theming from './Theming';
 import ButtonList from './ButtonList';
 
 const repoUrl = 'https://github.com/martinandert/babel-plugin-css-in-js';
@@ -14,6 +15,7 @@ class App extends React.Component {
         <p>You can find the code for all components <a href={codeUrl}>here</a>.</p>
 
         <MediaQueries />
+        <Theming />
         <ButtonList />
       </div>
     );
