@@ -9,6 +9,11 @@ Tags:
 - [Internal]
 - [Polish]
 
+## v1.5.1 (January 22, 2016)
+
+- **Bug Fix**
+  - Don't validate parent selectors
+
 ## v1.5.0 (January 22, 2016)
 
 - **New Feature**
