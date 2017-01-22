@@ -9,7 +9,7 @@ Tags:
 - [Internal]
 - [Polish]
 
-## Unreleased
+## v1.5.0 (January 22, 2016)
 
 - **New Feature**
   - Support basic theming via nesting in global selectors
