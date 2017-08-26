@@ -9,7 +9,7 @@ A plugin for Babel v6 which transforms inline styles defined in JavaScript modul
 
 babel-plugin-css-in-js works seamlessly on both client and server. It has built-in support for media queries, pseudo-classes, attribute selectors, and theming. The plugin's options allow you to configure vendor-prefixing, minification, and class name compression.
 
-If you're impatient, [visit the live demo](http://babel-plugin-css-in-js.martinandert.com/). The source code for it can be found [in the example directory](example/).
+If you're impatient, [visit the live demo](http://babel-plugin-css-in-js.andert.io/). The source code for it can be found [in the example directory](example/).
 
 ## Example
 
